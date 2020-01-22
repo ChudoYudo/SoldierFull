@@ -1,36 +1,45 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import ExampleForm from "./form";
+import SoldierForm from "./form";
+import Label from "reactstrap/es/Label";
 
-const ModalExample = (props) => {
-    const {
-        buttonLabel,
-        className,
-        soldierId
-    } = props;
 
-    const [modal, setModal] = useState(false);
+class ModalExample extends React.Component{
 
-    const toggle = () => setModal(!modal);
-    const toggle2=()=>console.log("kek");
+    constructor(props) {
+        super(props);
+        this.state = {
+            isOpen : false
+        };
+        // this.toggle = this.toggle.bind(this);
 
-    console.log(props.soldierId);
+    }
+    componentDidMount() {
+        this.setState({isOpen:false})
+    }
 
-    return (
-        <div>
-            <Button color="danger" onClick={toggle}>{buttonLabel}</Button>
-            <Modal isOpen={modal} toggle={toggle} className={className}>
-                <ModalHeader toggle={toggle}>Modal title</ModalHeader>
-                <ModalBody>
-                <ExampleForm/>
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" onClick={toggle2}>Do Something</Button>{' '}
-                    <Button color="secondary" onClick={toggle}>Cancel</Button>
-                </ModalFooter>
-            </Modal>
-        </div>
-    );
+    toggle(){
+        this.setState({isOpen: !this.state.isOpen});
+    }
+
+    render() {
+        return (
+            <div>
+                <Button onClick={(e) => this.toggle(e)} >{this.props.buttonLabel}</Button>
+               <Modal isOpen={this.state.isOpen}>
+                   <ModalHeader >Modal title</ModalHeader>
+                   <ModalBody>
+                       <SoldierForm id={this.props.soldierId}/>
+                   </ModalBody>
+                   <ModalFooter>
+                       <Button color="primary"onClick={(e) => this.toggle(e)}>Do Something</Button>{' '}
+                       <Button color="secondary" onClick={(e) => this.toggle(e)}>Cancel</Button>
+                   </ModalFooter>
+               </Modal>
+
+            </div>
+        );
+    }
 }
 
 export default ModalExample;

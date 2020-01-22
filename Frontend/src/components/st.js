@@ -31,7 +31,8 @@ class Stable extends React.Component {
                     <th>#</th>
                     <th>First Name</th>
                     <th>Last Name</th>
-                    <th>Username</th>
+                    <th>Third Name</th>
+                    <th>Mill U</th>
                     <th>Action</th>
                 </tr>
                 </thead>

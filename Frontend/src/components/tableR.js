@@ -15,11 +15,12 @@ const TableRow = ({soldier}) => {
             <td className="pa3 bb b--black-10">
                 {soldier.last_name}
             </td>
-
+            <td className="pa3 bb b--black-10">
+                {soldier.third_name}
+            </td>
             <td className="pa3 bb b--black-10">
                 {soldier.milU}
             </td>
-
             <td className="pa3 bb b--black-10" width={"5%"}>
                 <ModalExample buttonLabel={"edit"} soldierId={soldier.id}/>
             </td>
