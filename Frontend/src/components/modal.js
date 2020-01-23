@@ -3,10 +3,6 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import SoldierForm from "./form";
 import Button from "@material-ui/core/Button";
 import EditIcon from '@material-ui/icons/Edit';
-import green from "@material-ui/core/colors/green"
-
-import Label from "reactstrap/es/Label";
-
 
 class ModalExample extends React.Component{
 
@@ -33,7 +29,7 @@ class ModalExample extends React.Component{
                <Modal isOpen={this.state.isOpen}>
                    <ModalHeader >Modal title</ModalHeader>
                    <ModalBody>
-                       <SoldierForm soldier={this.props.soldier}/>
+                       <SoldierForm toggle={this.toggle} soldier={this.props.soldier}/>
                    </ModalBody>
                    <ModalFooter>
                        <Button color="primary"onClick={(e) => this.toggle(e)}>Do Something</Button>{' '}

@@ -25,9 +25,14 @@ class MaterialTable extends React.Component {
         this.handleChangePage = this.handleChangePage.bind(this);
         this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
         this.del = this.del.bind(this);
+        this.updateData=this.updateData.bind(this);
 
     }
     componentDidMount(){
+        this.updateData();
+    }
+
+    updateData(){
         axios
             .get('http://127.0.0.1:7001/soldier/all')
             .then(({ data })=> {
@@ -73,7 +78,7 @@ class MaterialTable extends React.Component {
                         <TableBody>
                             {
                                 this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map ( (soldier)=>  {
-                                    return <CTableRow del={this.del} soldier={soldier} id={this.state.data.indexOf(soldier)} ></CTableRow>
+                                    return <CTableRow update={this.updateData} del={this.del} soldier={soldier} id={this.state.data.indexOf(soldier)} ></CTableRow>
                                 })
                             }
                         </TableBody>

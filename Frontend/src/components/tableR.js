@@ -1,14 +1,13 @@
 import React from 'react';
 import ModalExample from "./modal";
-import Fab from "@material-ui/core/Fab"
-import IconButton from "@material-ui/core/IconButton/"
 import ButtonGroup from "reactstrap/es/ButtonGroup";
-import AddIcon from "@material-ui/icons/Add";
-import EditIcon from '@material-ui/icons/Edit';
 import {Button} from "@material-ui/core";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow'
+import axios from "axios";
+import qs from 'qs';
+
 
 
 class CTableRow extends React.Component{
@@ -22,6 +21,17 @@ class CTableRow extends React.Component{
         this.del=this.del.bind(this);
     }
     del (e,soldier){
+        let dt = {
+            'id':this.props.soldier.id,
+        };
+        let url ='http://127.0.0.1:7001/soldier/delete';
+        let options = {
+            method: 'POST',
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            data: qs.stringify(dt),
+            url,
+        };
+        axios(options);
         this.props.del(soldier);
     }
     render() {
@@ -44,7 +54,7 @@ class CTableRow extends React.Component{
                 </TableCell>
                 <TableCell align={"center"}>
                     <ButtonGroup >
-                        <ModalExample buttonLabel={"edit"} soldier={this.props.soldier} soldierId={this.props.soldier.id}/>
+                        <ModalExample update={this.props.update} buttonLabel={"edit"} soldier={this.props.soldier} soldierId={this.props.soldier.id}/>
                         <Button color={"secondary"} onClick={(e)=>{this.del(e,this.props.soldier)}}  aria-label="edit">
                             <DeleteForeverIcon/>
                         </Button>
