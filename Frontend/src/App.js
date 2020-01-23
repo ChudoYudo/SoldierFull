@@ -9,6 +9,7 @@ import ExampleNav from "./components/nav";
 import SoldierTable from "./components/soldierTable";
 
 import Stable from "./components/st";
+import MaterialTable from "./components/MaterialTable";
 
 
 let users=[];
@@ -29,9 +30,10 @@ for(var i = 0; i < 25; i++) {
 function App() {
   return (
       <div>
-        <Stable/>
-        <ExampleNav/>
+        {/*<Stable/>*/}
+        {/*<ExampleNav/>*/}
         {/*<SoldierTable/>*/}
+        <MaterialTable/>
       </div>
   );
 }

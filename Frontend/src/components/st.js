@@ -24,9 +24,9 @@ class Stable extends React.Component {
             .catch((err)=> {})
     }
 
-    del (id){
-        console.log("lol");
+    del (soldier){
         let map = this.state.data;
+        let id= map.indexOf(soldier);
         map.splice(id,1);
         this.setState({data: map});
     }
@@ -47,7 +47,7 @@ class Stable extends React.Component {
                 <tbody>
                 {
                     this.state.data.map ( (soldier)=>  {
-                         return <TableRow del={this.del} soldier={soldier} ></TableRow>
+                         return <TableRow del={this.del} soldier={soldier} id={this.state.data.indexOf(soldier)} ></TableRow>
                     })
                 }
                 </tbody>

@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import SoldierForm from "./form";
+import Button from "@material-ui/core/Button";
+import EditIcon from '@material-ui/icons/Edit';
+import green from "@material-ui/core/colors/green"
+
 import Label from "reactstrap/es/Label";
 
 
@@ -11,7 +15,7 @@ class ModalExample extends React.Component{
         this.state = {
             isOpen : false
         };
-        // this.toggle = this.toggle.bind(this);
+        this.toggle = this.toggle.bind(this);
 
     }
     componentDidMount() {
@@ -25,11 +29,11 @@ class ModalExample extends React.Component{
     render() {
         return (
             <div>
-                <Button onClick={(e) => this.toggle(e)} >{this.props.buttonLabel}</Button>
+                <Button color={"primary"} onClick={(e) => this.toggle(e)} ><EditIcon/></Button>
                <Modal isOpen={this.state.isOpen}>
                    <ModalHeader >Modal title</ModalHeader>
                    <ModalBody>
-                       <SoldierForm id={this.props.soldierId}/>
+                       <SoldierForm soldier={this.props.soldier}/>
                    </ModalBody>
                    <ModalFooter>
                        <Button color="primary"onClick={(e) => this.toggle(e)}>Do Something</Button>{' '}
