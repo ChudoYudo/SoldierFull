@@ -11,6 +11,7 @@ class Stable extends React.Component {
             kind: '',
             data: []
         };
+        this.del = this.del.bind(this);
     }
     componentDidMount(){
         axios
@@ -21,6 +22,13 @@ class Stable extends React.Component {
                 });
             })
             .catch((err)=> {})
+    }
+
+    del (id){
+        console.log("lol");
+        let map = this.state.data;
+        map.splice(id,1);
+        this.setState({data: map});
     }
 
     render() {
@@ -38,8 +46,8 @@ class Stable extends React.Component {
                 </thead>
                 <tbody>
                 {
-                    this.state.data.map(function (soldier) {
-                        return <TableRow soldier={soldier}></TableRow>
+                    this.state.data.map ( (soldier)=>  {
+                         return <TableRow del={this.del} soldier={soldier} ></TableRow>
                     })
                 }
                 </tbody>
