@@ -9,7 +9,10 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import CTableRow from "./tableR";
 
+
 import axios from "axios";
+import SearchRow from "./searchRow";
+import qs from 'qs';
 
 
 
@@ -25,9 +28,11 @@ class MaterialTable extends React.Component {
         this.handleChangePage = this.handleChangePage.bind(this);
         this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
         this.del = this.del.bind(this);
+        this.search = this.search.bind(this);
         this.updateData=this.updateData.bind(this);
 
     }
+
     componentDidMount(){
         this.updateData();
     }
@@ -60,9 +65,23 @@ class MaterialTable extends React.Component {
         this.setState({page:0});
     };
 
+    search(dt){
+        let url ='http://127.0.0.1:7001/soldier/search';
+        let options = {
+            method: 'POST',
+            headers: { 'content-type': 'application/x-www-form-urlencoded' },
+            data: qs.stringify(dt),
+            url,
+        };
+        axios(options) .catch((err)=> {});
+    }
+
     render() {
         return (
             <Paper >
+                <div>
+
+                </div>
                 <TableContainer >
                     <Table bordered stickyHeader={true} aria-label="sticky table">
                         <TableHead>
@@ -76,9 +95,10 @@ class MaterialTable extends React.Component {
                             </tr>
                         </TableHead>
                         <TableBody>
+                            <SearchRow search={this.search} />
                             {
                                 this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map ( (soldier)=>  {
-                                    return <CTableRow update={this.updateData} del={this.del} soldier={soldier} id={this.state.data.indexOf(soldier)} ></CTableRow>
+                                    return <CTableRow update={this.updateData} del={this.del} soldier={soldier} id={this.state.data.indexOf(soldier)}></CTableRow>
                                 })
                             }
                         </TableBody>

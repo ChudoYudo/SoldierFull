@@ -10,6 +10,8 @@ import SoldierTable from "./components/soldierTable";
 
 import Stable from "./components/st";
 import MaterialTable from "./components/MaterialTable";
+require('dotenv').config();
+
 
 
 let users=[];

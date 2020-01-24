@@ -29,7 +29,7 @@ class ModalExample extends React.Component{
                <Modal isOpen={this.state.isOpen}>
                    <ModalHeader >Modal title</ModalHeader>
                    <ModalBody>
-                       <SoldierForm toggle={this.toggle} soldier={this.props.soldier}/>
+                       <SoldierForm update={this.props.update} toggle={this.toggle} soldier={this.props.soldier}/>
                    </ModalBody>
                    <ModalFooter>
                        <Button color="primary"onClick={(e) => this.toggle(e)}>Do Something</Button>{' '}

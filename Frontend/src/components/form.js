@@ -4,7 +4,6 @@ import axios from "axios";
 
 import qs from 'qs';
 
-
 class SoldierForm extends React.Component{
     constructor(props) {
         super(props);
@@ -28,7 +27,7 @@ class SoldierForm extends React.Component{
         this.setState({third_name:this.props.soldier.third_name});
     }
 
-    submit(event){
+    submit = async (event) => {
         let dt = {
             'id':this.props.soldier.id,
             'first_name':this.state.first_name,
@@ -42,10 +41,10 @@ class SoldierForm extends React.Component{
             data: qs.stringify(dt),
             url,
         };
-        axios(options);
-        this.props.toggle();
-        this.props.update();
-        event.preventDefault();
+        axios(options)
+            .then(({ ddd })=> { console.log(ddd);})
+            .then(this.props.update())
+            .then(this.props.toggle());
     }
     change_fname(event){
         this.setState({first_name:event.target.value})
@@ -79,7 +78,7 @@ class SoldierForm extends React.Component{
                             <Input  type={"milU"} name="milU" defaultValue={this.props.soldier.milU}  />
                         </FormGroup>
                         <FormGroup>
-                            <Button type={"submit"} >Submit</Button>
+                            <Button onClick={this.submit} >Submit</Button>
                         </FormGroup>
                     </Col>
                 </Row>

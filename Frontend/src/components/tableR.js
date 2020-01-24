@@ -31,7 +31,7 @@ class CTableRow extends React.Component{
             data: qs.stringify(dt),
             url,
         };
-        axios(options);
+        axios(options) .catch((err)=> {});
         this.props.del(soldier);
     }
     render() {
