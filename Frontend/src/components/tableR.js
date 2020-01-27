@@ -32,20 +32,24 @@ class CTableRow extends React.Component{
             url,
         };
         axios(options) .catch((err)=> {});
-        this.props.del(soldier);
+        setTimeout(()=> this.props.del(soldier),150);
+
     }
     render() {
         return (
             <TableRow hover role="checkbox" tabIndex={-1} key={this.props.id}>
-                <TableCell align={"center"}>
+                <TableCell style={{width:5 +'%'}} align={"center"}>
                     {this.props.id+1}
                 </TableCell>
-                <TableCell align={"center"}>
-                    {this.props.soldier.first_name}
-                </TableCell>
+
                 <TableCell align={"center"}>
                     {this.props.soldier.last_name}
                 </TableCell>
+
+                <TableCell align={"center"}>
+                    {this.props.soldier.first_name}
+                </TableCell>
+
                 <TableCell align={"center"}>
                     {this.props.soldier.third_name}
                 </TableCell>

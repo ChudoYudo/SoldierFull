@@ -22,13 +22,15 @@ class MaterialTable extends React.Component {
         this.state = {
             kind: '',
             data: [],
+            filtred_data: [],
+            search_params: null,
             page: 0,
             rowsPerPage:10
         };
         this.handleChangePage = this.handleChangePage.bind(this);
         this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
         this.del = this.del.bind(this);
-        this.search = this.search.bind(this);
+        this.setSearchParams = this.setSearchParams.bind(this);
         this.updateData=this.updateData.bind(this);
 
     }
@@ -37,26 +39,45 @@ class MaterialTable extends React.Component {
         this.updateData();
     }
 
-    updateData(){
+    getOriginData(){
         axios
             .get('http://127.0.0.1:7001/soldier/all')
             .then(({ data })=> {
                 this.setState({
-                    data: data
+                    data: data,
+                    filtred_data: data
+                }, function () {
+                    this.applySearchFiltre();
                 });
             })
-            .catch((err)=> {})
+            .catch((err)=> {});
+
+    }
+
+    applySearchFiltre(){
+        let mass= this.state.data;
+        if (this.state.search_params!=null) {
+            mass = this.fname_filtre(mass, this.state.search_params.first_name);
+            mass = this.lname_filtre(mass, this.state.search_params.last_name);
+        }
+        this.setState({filtred_data: mass});
+    }
+
+    updateData(){
+        this.getOriginData();
     }
 
     del (soldier){
-        let map = this.state.data;
+        let map = this.state.filtred_data;
         let id= map.indexOf(soldier);
         map.splice(id,1);
-        this.setState({data: map});
+        this.setState({filtred_data: map},function () {
+            this.updateData();
+        });
     }
 
     handleChangePage = (event, newPage) => {
-        console.log(newPage)
+        console.log(newPage);
         this.setState({page:newPage});
     };
 
@@ -65,40 +86,62 @@ class MaterialTable extends React.Component {
         this.setState({page:0});
     };
 
-    search(dt){
-        let url ='http://127.0.0.1:7001/soldier/search';
-        let options = {
-            method: 'POST',
-            headers: { 'content-type': 'application/x-www-form-urlencoded' },
-            data: qs.stringify(dt),
-            url,
-        };
-        axios(options) .catch((err)=> {});
+    fname_filtre(mass,fname){
+        let ret=[];
+        mass.map( (soldier)=>  {
+           if ((soldier.first_name.indexOf(fname)> -1)){
+               ret.push(soldier);
+           }
+        });
+        return ret;
+    }
+
+    lname_filtre(mass,lname){
+        let ret=[];
+        mass.map( (soldier)=>  {
+            if ((soldier.last_name.indexOf(lname)> -1)){
+                ret.push(soldier);
+            }
+        });
+        return ret;
+    }
+
+
+    setSearchParams(dt){
+        this.setS(dt);
+        this.forceUpdate();
+        this.applySearchFiltre();
+    }
+    setS(dt){
+        this.setState({search_params: dt}, function () {
+            this.applySearchFiltre();
+        });
+
     }
 
     render() {
         return (
-            <Paper >
-                <div>
+            <div>
 
-                </div>
+
+            <Paper >
                 <TableContainer >
-                    <Table bordered stickyHeader={true} aria-label="sticky table">
+                    <Table stickyHeader={true} aria-label="sticky table">
                         <TableHead>
                             <tr>
-                                <TableCell align={"center"}>#</TableCell>
-                                <TableCell align={"center"}>First Name</TableCell>
-                                <TableCell align={"center"}>Last Name</TableCell>
-                                <TableCell align={"center"}>Third Name</TableCell>
-                                <TableCell align={"center"}>Mill U</TableCell>
-                                <TableCell align={"center"}>Action</TableCell>
+                                <TableCell align={"center"}>№</TableCell>
+                                <TableCell align={"center"}>Фамилия</TableCell>
+                                <TableCell align={"center"}>Имя</TableCell>
+                                <TableCell align={"center"}>Отчество</TableCell>
+                                <TableCell align={"center"}>Номер Части</TableCell>
+                                <TableCell align={"center"}>Действие</TableCell>
                             </tr>
                         </TableHead>
                         <TableBody>
-                            <SearchRow search={this.search} />
+                            <SearchRow setSearchParams={this.setSearchParams} />
                             {
-                                this.state.data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map ( (soldier)=>  {
-                                    return <CTableRow update={this.updateData} del={this.del} soldier={soldier} id={this.state.data.indexOf(soldier)}></CTableRow>
+                                this.state.filtred_data.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map ( (soldier)=>  {
+                                    return <CTableRow update={this.updateData} del={this.del} soldier={soldier} id={this.state.filtred_data.indexOf(soldier)}></CTableRow>
                                 })
                             }
                         </TableBody>
@@ -111,13 +154,15 @@ class MaterialTable extends React.Component {
                         inputProps: { 'aria-label': 'rows per page' },
                         native: true,
                     }}
-                    count={this.state.data.length}
+                    count={this.state.filtred_data.length}
                     rowsPerPage={this.state.rowsPerPage}
                     page={this.state.page}
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
                 />
             </Paper>
+
+            </div>
         )
     }
 }

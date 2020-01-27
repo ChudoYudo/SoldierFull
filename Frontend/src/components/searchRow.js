@@ -8,7 +8,10 @@ import TableRow from '@material-ui/core/TableRow'
 import axios from "axios";
 import qs from 'qs';
 import SearchIcon from '@material-ui/icons/Search';
-import Fab from "@material-ui/core/Fab"
+import ClearIcon from '@material-ui/icons/Clear';
+import Fab from "@material-ui/core/Fab";
+import IconButton from "@material-ui/core/IconButton"
+import InputGroup from "reactstrap/es/InputGroup";
 
 
 
@@ -16,13 +19,21 @@ class SearchRow extends React.Component{
 
     constructor(props) {
         super(props);
+        this.props ={
+          fname: 0
+        };
         this.state = {
             kind: '',
-            first_name:0,
+            first_name:'',
+            last_name:'',
             data: []
         };
         this.change_fname=this.change_fname.bind(this);
+        this.change_lname=this.change_lname.bind(this);
         this.search=this.search.bind(this);
+        this.clearFname=this.clearFname.bind(this);
+        this.clearLname=this.clearLname.bind(this);
+        this.reset=this.reset.bind(this);
     }
     componentDidMount() {
         // this.setState({last_name:this.props.soldier.last_name});
@@ -31,10 +42,43 @@ class SearchRow extends React.Component{
     search(){
         let dt= {};
         dt['first_name']=this.state.first_name;
-        this.props.search(dt);
+        dt['last_name']=this.state.last_name;
+        this.props.setSearchParams(dt);
+    }
+    reset(){
+        this.setState({
+            first_name: "",
+            last_name: ""
+        },function () {
+            let dt= null;
+            this.props.setSearchParams(dt);
+            console.log(this.state.first_name);
+        });
+
+    }
+    clearFname(){
+        this.setState({
+            first_name: "",
+        },function () {
+            let dt= null;
+            this.props.setSearchParams(dt);
+            console.log(this.state.first_name);
+        });
+    }
+    clearLname(){
+        this.setState({
+            last_name: "",
+        },function () {
+            let dt= null;
+            this.props.setSearchParams(dt);
+            console.log(this.state.first_name);
+        });
     }
     change_fname (event){
         this.setState({first_name:event.target.value});
+    }
+    change_lname (event){
+        this.setState({last_name:event.target.value});
     }
     render() {
         return (
@@ -44,7 +88,12 @@ class SearchRow extends React.Component{
                 </TableCell>
 
                 <TableCell align={"center"}>
-                    <Input onChange={this.change_fname}></Input>
+                    <Input value={this.state.last_name} onChange={this.change_lname} ></Input>
+                    <IconButton onClick={this.clearLname}><ClearIcon /></IconButton>
+                </TableCell>
+
+                <TableCell align={"center"}>
+                    <Input value={this.state.first_name} onChange={this.change_fname}></Input><IconButton onClick={this.clearFname}><ClearIcon /></IconButton>
                 </TableCell>
 
                 <TableCell align={"center"}>
@@ -56,11 +105,10 @@ class SearchRow extends React.Component{
                 </TableCell>
 
                 <TableCell align={"center"}>
-                    <Input></Input>
-                </TableCell>
-
-                <TableCell align={"center"}>
-                    <Fab color="primary" aria-label="search"><SearchIcon onClick={this.search} /></Fab>
+                    <ButtonGroup >
+                        <Fab style={{marginRight: 8 + 'px'}} size="medium"  onClick={this.search} color="primary" aria-label="search"><SearchIcon /></Fab>
+                        <Fab size="medium" onClick={this.reset} color="secondary" aria-label="search"><ClearIcon /></Fab>
+                    </ButtonGroup>
                 </TableCell>
 
             </TableRow>
