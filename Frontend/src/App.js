@@ -36,7 +36,7 @@ function App() {
   return (
       <div>
         {/*<Stable/>*/}
-        {/*<ExampleNav/>*/}
+        <ExampleNav/>
         {/*<SoldierTable/>*/}
         <MaterialTable/>
       </div>

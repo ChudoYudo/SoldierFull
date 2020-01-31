@@ -4,7 +4,7 @@ import axios from "axios";
 import qs from 'qs';
 import InputMask from 'react-input-mask';
 import Select from '@material-ui/core/Select';
-class SoldierForm extends React.Component{
+class NewSoldierForm extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -26,21 +26,17 @@ class SoldierForm extends React.Component{
     }
 
     componentDidMount() {
-        this.setState({first_name:this.props.soldier.first_name});
-        this.setState({last_name:this.props.soldier.last_name});
-        this.setState({third_name:this.props.soldier.third_name});
-        this.setState({birthday_date:this.props.soldier.birthday_date});
+
     }
 
     submit = async (event) => {
         let dt = {
-            'id':this.props.soldier.id,
             'first_name':this.state.first_name,
             'last_name':this.state.last_name,
             'third_name':this.state.third_name,
             'birthday_date':this.state.birthday_date,
         };
-        let url ='http://localhost:7001/soldier/change';
+        let url ='http://127.0.0.1:7001/soldier/addnew';
         let options = {
             method: 'POST',
             headers: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -50,7 +46,10 @@ class SoldierForm extends React.Component{
         axios(options)
             .then(({ ddd })=> { console.log(ddd);})
             .then(this.props.toggle());
-        setTimeout(()=>this.props.update(),150);
+        setTimeout(()=>{
+            this.props.update();
+            this.props.goend();
+        },150);
     }
     change_fname(event){
         this.setState({first_name:event.target.value})
@@ -68,31 +67,30 @@ class SoldierForm extends React.Component{
         this.setState({milu_number:event.target.value})
     }
 
-
-   render (){
+    render (){
         return (
             <Form onSubmit={this.submit}>
                 <Row form>
                     <Col md={6}>
                         <FormGroup>
                             <Label>Имя </Label>
-                            <Input onChange={this.change_fname}  name="fName" id="fName" defaultValue={this.props.soldier.first_name} />
+                            <Input onChange={this.change_fname}  name="fName" id="fName" />
                         </FormGroup>
                         <FormGroup>
                             <Label>Фамилия </Label>
-                            <Input onChange={this.change_lname}  name="lName" id="lName" defaultValue={this.props.soldier.last_name} />
+                            <Input onChange={this.change_lname}  name="lName" id="lName"/>
                         </FormGroup>
                         <FormGroup>
                             <Label>Отчество </Label>
-                            <Input onChange={this.change_tname} type={"tNAme"}  defaultValue={this.props.soldier.third_name} />
+                            <Input onChange={this.change_tname} type={"tNAme"}  />
                         </FormGroup>
                         <FormGroup>
                             <Label>Номер Части </Label>
-                            <Input onChange={this.change_milunumber} type={"tNAme"}  defaultValue={this.props.soldier.milu_number} />
+                            <Input onChange={this.change_milunumber} type={"tNAme"}  />
                         </FormGroup>
                         <FormGroup>
                             <Label>Дата Рождения</Label>
-                            <InputMask mask="99/99/9999"  onChange={this.change_bdate} defaultValue={this.props.soldier.birthday_date}/>
+                            <InputMask mask="99/99/9999"  onChange={this.change_bdate}/>
                         </FormGroup>
                         <FormGroup>
                             <Button onClick={this.submit} >Submit</Button>
@@ -104,4 +102,4 @@ class SoldierForm extends React.Component{
     }
 }
 
-export default SoldierForm;
+export default NewSoldierForm;

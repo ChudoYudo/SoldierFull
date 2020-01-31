@@ -6,6 +6,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
+import TableFooter from '@material-ui/core/TableFooter'
 import TablePagination from '@material-ui/core/TablePagination';
 import CTableRow from "./tableR";
 
@@ -13,6 +14,9 @@ import CTableRow from "./tableR";
 import axios from "axios";
 import SearchRow from "./searchRow";
 import qs from 'qs';
+import {Button} from "@material-ui/core";
+import {Label} from "@material-ui/icons";
+import NewSoldierModal from "./newSModal";
 
 
 
@@ -32,6 +36,7 @@ class MaterialTable extends React.Component {
         this.del = this.del.bind(this);
         this.setSearchParams = this.setSearchParams.bind(this);
         this.updateData=this.updateData.bind(this);
+        this.gotoend=this.gotoend.bind(this);
 
     }
 
@@ -39,9 +44,10 @@ class MaterialTable extends React.Component {
         this.updateData();
     }
 
+
     getOriginData(){
         axios
-            .get('http://127.0.0.1:7001/soldier/all')
+            .get('http://localhost:7001/soldier/all')
             .then(({ data })=> {
                 this.setState({
                     data: data,
@@ -60,9 +66,9 @@ class MaterialTable extends React.Component {
             mass = this.fname_filtre(mass, this.state.search_params.first_name);
             mass = this.lname_filtre(mass, this.state.search_params.last_name);
         }
+        console.log(this.state.search_params);
         this.setState({filtred_data: mass});
     }
-
     updateData(){
         this.getOriginData();
     }
@@ -89,7 +95,7 @@ class MaterialTable extends React.Component {
     fname_filtre(mass,fname){
         let ret=[];
         mass.map( (soldier)=>  {
-           if ((soldier.first_name.indexOf(fname)> -1)){
+           if ((soldier.first_name.toUpperCase().indexOf(fname.toUpperCase())> -1)){
                ret.push(soldier);
            }
         });
@@ -109,7 +115,6 @@ class MaterialTable extends React.Component {
 
     setSearchParams(dt){
         this.setS(dt);
-        this.forceUpdate();
         this.applySearchFiltre();
     }
     setS(dt){
@@ -117,6 +122,10 @@ class MaterialTable extends React.Component {
             this.applySearchFiltre();
         });
 
+    }
+    gotoend(){
+        let page = parseInt((this.state.filtred_data.length+1)/this.state.rowsPerPage);
+        this.handleChangePage(null,page);
     }
 
     render() {
@@ -145,6 +154,12 @@ class MaterialTable extends React.Component {
                                 })
                             }
                         </TableBody>
+                        <TableFooter>
+                            <TableCell align={'right'} colSpan={5}><h2>Добавить нового:</h2></TableCell>
+                            <TableCell align={"left"}>
+                                <NewSoldierModal goend={this.gotoend} update={this.updateData} />
+                            </TableCell>
+                        </TableFooter>
                     </Table>
                 </TableContainer>
                 <TablePagination

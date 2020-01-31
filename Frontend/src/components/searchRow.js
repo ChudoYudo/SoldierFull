@@ -59,19 +59,15 @@ class SearchRow extends React.Component{
     clearFname(){
         this.setState({
             first_name: "",
-        },function () {
-            let dt= null;
-            this.props.setSearchParams(dt);
-            console.log(this.state.first_name);
+        },()=> {
+           this.search();
         });
     }
     clearLname(){
         this.setState({
             last_name: "",
-        },function () {
-            let dt= null;
-            this.props.setSearchParams(dt);
-            console.log(this.state.first_name);
+        }, () => {
+            this.search();
         });
     }
     change_fname (event){
